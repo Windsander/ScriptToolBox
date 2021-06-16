@@ -307,13 +307,13 @@ spec:
     nodes:
       - name: "master1"
         devices:
-          - name: "vda"
+          - name: "vdc"
       - name: "worker1"
         devices:
-          - name: "vda"
+          - name: "vdc"
       - name: "worker2"
         devices:
-          - name: "vda"
+          - name: "vdc"
 #    - name: "172.17.4.101"
 #      directories: # specific directories to use for storage can be specified for each node
 #      - path: "/rook/storage-dir"
