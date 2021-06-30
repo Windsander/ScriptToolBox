@@ -179,6 +179,27 @@ spec:
   #    monitoring:
   resources:
   # The requests and limits set here, allow the mgr pod to use half of one CPU core and 1 gigabyte of memory
+    mgr:
+      limits:
+        cpu: "500m"
+        memory: "1024Mi"
+      requests:
+        cpu: "500m"
+        memory: "1024Mi"
+    mon:
+      limits:
+        cpu: "1"
+        memory: "1024Mi"
+      requests:
+        cpu: "500m"
+        memory: "1024Mi"
+    osd:
+      limits:
+        cpu: "1"
+        memory: "2048Mi"
+      requests:
+        cpu: "500m"
+        memory: "1024Mi"
   #    mgr:
   #      limits:
   #        cpu: "500m"
@@ -208,7 +229,7 @@ spec:
   storage: # cluster level storage configuration and selection
     useAllNodes: true
     useAllDevices: true
-    #deviceFilter:
+    #deviceFilter: /dev/sd[v-z]
     config:
     # crushRoot: "custom-root" # specify a non-default root label for the CRUSH map
     # metadataDevice: "md0" # specify a non-rotational storage so ceph-volume will use it as block db device of bluestore.
