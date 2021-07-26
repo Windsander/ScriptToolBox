@@ -1,0 +1,57 @@
+apiVersion: kubeadm.k8s.io/v1beta2
+kind: InitConfiguration
+nodeRegistration:
+  name: "Master1"
+  criSocket: "/var/run/dockershim.sock"
+  taints:
+    - key: "node-role.kubenetes.io/master"
+      effect: "NoSchedule"
+  kubeletExtraArgs:
+    cgroup-driver: "systemd"
+  ignorePreflightErrors:
+    - IsPrivilegedUser
+localAPIEndpoint:
+  advertiseAddress: "MASTER_IP_1"
+  bindPort: 6443
+---
+apiVersion: kubeadm.k8s.io/v1beta2
+kind: ClusterConfiguration
+kubernetesVersion: "v1.21.3"
+controlPlaneEndpoint: "VIRTUAL_IP:6444"
+imageRepository: registry.aliyuncs.com/google_containers
+clusterName: "master1"
+certificatesDir: "/etc/kubernetes/pki"
+dns:
+  type: "CoreDNS"
+networking:
+  serviceSubnet: "10.1.0.0/16"
+  podSubnet: "10.244.0.0/16"
+  dnsDomain: “cluster.local”
+etcd:
+  external:
+    endpoints:
+      - "https://MASTER_IP_1:2379"
+      - "https://MASTER_IP_2:2379"
+      - "https://MASTER_IP_3:2379"
+    caFile: "/etc/etcd/ssl/etcd.crt"
+    certFile: "/etc/etcd/ssl/etcd_req.crt"
+    keyFile: "/etc/etcd/ssl/etcd_req.key"
+apiServer:                                   #apiServer 访问控制（IP｜DNS）
+  certSANs:
+    - "MASTER_IP_1"
+    - "MASTER_IP_2"
+    - "MASTER_IP_3"
+    "WORKER_LIST"
+controllerManager:
+  extraArgs:
+    "node-cidr-mask-size": "20"
+scheduler:
+  extraArgs:
+    address: "MASTER_IP_1"
+---
+apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+---
+apiVersion: kubeproxy.config.k8s.io/v1alpha1
+kind: KubeProxyConfiguration
+mode: "ipvs"

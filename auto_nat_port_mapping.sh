@@ -119,3 +119,9 @@ function auto() {
   done
   echo "-- auto_nat_port_mapping::finish ---"
 }
+
+
+echo "net.ipv4.ip_forward=1" > /etc/sysctl.conf        ##开启路由转发功能
+sysctl -p                       ##使其生效
+iptables -t nat -I POSTROUTING -j SNAT -s 192.168.20.0/24 --to-source 192.168.10.12      ##配置策略使内网可以ping通外网
+iptables -t nat -A PREROUTING -j DNAT -d 192.168.10.12 -p tcp --dport 80 --to-destination 192.168.20.13             ##配置策略映射内网服务
