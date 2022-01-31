@@ -1,0 +1,65 @@
+#apiVersion: cert-manager.io/v1
+#kind: Issuer
+#metadata:
+#  name: ingress-rook-ceph-encrypt
+#  namespace: rook-ceph
+#spec:
+#  selfSigned: {}
+#---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: ingress-rook-ceph-com-secret
+  namespace: rook-ceph
+spec:
+  secretName: ingress-rook-ceph-com-tls
+  duration: 2160h
+  renewBefore: 360h
+  subject:
+    organizations:
+    - CyberFederal Inc.
+  isCA: false
+  dnsNames:
+  - www.cyberunion.base1.rook-ceph
+  issuerRef:
+    name: local-ca-clusterissuer
+    kind: ClusterIssuer
+    group: cert-manager.io
+---
+#
+# This example is for Kubernetes running an ngnix-ingress
+# and an ACME (e.g. Let's Encrypt) certificate service
+#
+# The nginx-ingress annotations support the dashboard
+# running using HTTPS with a self-signed certificate
+#
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-rook-ceph-dashboard
+  namespace: rook-ceph
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    #kubernetes.io/tls-acme: "true"
+    #cert-manager.io/issuer: "local-ca-clusterissuer"
+    #nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/server-snippet: |
+      proxy_ssl_verify off;
+spec:
+  tls:
+    - hosts:
+        - www.cyberfederal.base1.rook-ceph
+      secretName: ingress-rook-ceph-com-tls
+  rules:
+    - host: www.cyberfederal.base1.rook-ceph
+      http:
+        paths:
+          - path: / #dashboard/rook-ceph(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: rook-ceph-mgr-dashboard
+                port:
+                  name: https-dashboard
+   

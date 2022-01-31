@@ -1,0 +1,4 @@
+#!/bin/bash
+kubeadm join 192.168.122.254:6444 --token 5sbez3.nik5nr9heoyojvn5 \
+	--discovery-token-ca-cert-hash sha256:b230532428f7bea19908422eb6932c9c297ff9d1e5dadf411e8d520c088ef4ef \
+	--control-plane
