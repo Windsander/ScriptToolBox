@@ -1,0 +1,12 @@
+#!/bin/bash
+#=============================== BELOW is Localizations ===============================
+
+###############################################################################
+# >>> git global resume >>>
+
+git config --global user.email $USER@xiaomi.com
+git config --global user.name $USER
+git config --global core.symlinks true
+
+# <<< git global resumed <<<
+###############################################################################

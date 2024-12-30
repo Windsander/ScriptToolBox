@@ -1,0 +1,135 @@
+#!/bin/bash
+#=============================== BELOW is Localizations ===============================
+
+###############################################################################
+# >>> repo initialize >>>
+
+# Repo key from <REPO_DOWNLOAD_URL> file's MAINTAINER_KEY
+REPO_MAINTAINER_KEYS="
+
+     Repo Maintainer <repo@android.kernel.org>
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+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
+cZ7aFsJF4PtcDrfdejyAxbtsSHI=
+=82Tj
+-----END PGP PUBLIC KEY BLOCK-----
+"
+
+SSHC_MAINTAINER_BASE="
+Host *
+    PubkeyAcceptedKeyTypes +ssh-rsa
+"
+
+# Define the path for repo in local-range & prepare Official signed key
+if [ -f "$GNUPGHOME" ]; then
+    chmod 700 $GNUPGHOME
+else
+    mkdir -p $GNUPGHOME
+    chmod 700 $GNUPGHOME
+fi
+echo "$SSHC_MAINTAINER_BASE" > $SSHC_PATH/config
+echo "$REPO_MAINTAINER_KEYS" > $GNUPGHOME/repo_public_key.asc
+gpg --homedir $GNUPGHOME --import $GNUPGHOME/repo_public_key.asc
+gpg --list-keys
+
+# Check if the repo file exists
+if [ -f "$REPO_PATH" ]; then
+    # Grant execute permissions
+    chmod a+x "${REPO_PATH}"
+        
+    echo "repo already exists, no need to download."
+else
+    echo "repo not found, downloading..."
+    mkdir -p ${HOME}/.bin
+
+    # Download repo using curl
+    curl -o "$REPO_PATH" "$REPO_DOWNLOAD_URL"
+    
+    # Check if the download was successful
+    if [ $? -eq 0 ]; then
+        echo "Download successful. Setting executable permissions..."
+        # Grant execute permissions
+        chmod a+x "$REPO_PATH"
+        
+        #First line removed and replaced with "#!python"
+        # sed '1d' "${REPO_PATH}" > "${REPO_PATH}.tmp" && mv "${REPO_PATH}.tmp" "${REPO_PATH}"
+        # sed '1i #!python' "${REPO_PATH}" > "${REPO_PATH}.tmp" && mv "${REPO_PATH}.tmp" "${REPO_PATH}"
+
+        echo "First line removed and replaced with '#!python'."
+    else
+        echo "Download failed. Please check the URL and your network connection."
+    fi
+fi
+
+# Define repo as [python3 repo] functional
+export PATH="${REPO_PATH}:$PATH"
+alias repo="${REPO_PATH}"
+# alias cygpath="wslpath"
+
+# <<< repo initialized <<<
+###############################################################################

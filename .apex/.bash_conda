@@ -1,0 +1,108 @@
+#!/bin/bash
+#=============================== BELOW is Localizations ===============================
+
+###############################################################################
+# >>> conda initialize >>>
+
+# Conda compatiable configs
+export CONDA_DISABLE_PYC=1
+
+# .condarc rebase resource to tsinghua mirror
+CARC_MAINTAINER_BASE="\
+channels:
+  - defaults
+show_channel_urls: true
+default_channels:
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/msys2
+custom_channels:
+  conda-forge: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  pytorch: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+envs_dirs:
+  - ${CONDA_ENVS_DIR}
+"
+
+echo "$CARC_MAINTAINER_BASE" > $HOME/.condarc
+
+# Managed by 'conda init'
+if [ -d "$CONDA_BASE_DIR" ]; then
+    chmod 777 $CONDA_BASE_DIR
+else
+    mkdir -p $CONDA_BASE_DIR
+    chmod 777 $CONDA_BASE_DIR
+
+    # Download repo using wget
+    wget \
+        --header "User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36" \
+        --header "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" \
+        --header "Accept-Language: en-US,en;q=0.5" \
+        --header "Accept-Encoding: gzip, deflate, br" \
+        --header "DNT: 1" \
+        --header "Connection: keep-alive" \
+        --header "Upgrade-Insecure-Requests: 1" \
+        --no-check-certificate \
+        -P $CONDA_BASE_DIR $ANACONDA_DOWNLOAD_URL
+       
+    # Check if the download was successful
+    if [ $? -eq 0 ]; then
+        echo "Download successful. Setting anaconda3 installing..."
+        # Grant execute permissions
+        chmod a+x "$ANACONDA_INSTALLS_BASH"
+        
+        # Installing anaconda3
+        echo "anaconda3 installing... please for guiding"
+        bash $ANACONDA_INSTALLS_BASH -p $CONDA_BASE_DIR
+
+        echo "anaconda3 installed."
+    else
+        echo "Download failed. Please check the URL and your network connection."
+    fi
+
+fi
+
+# __conda_setup="$('${CONDA_BASE_DIR}/condabin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+# if [ $? -eq 0 ]; then
+#     eval "$__conda_setup"
+# else
+#     if [ -f "$CONDA_BASE_DIR/etc/profile.d/conda-wsl.sh" ]; then
+#         . "$CONDA_BASE_DIR/etc/profile.d/conda-wsl.sh"
+#     else
+#         export PATH="${ANACONDA_PATH}:$PATH"
+#     fi
+# fi
+# unset __conda_setup
+
+# Network setup (if needed)
+# export HTTP_PROXY=
+# export HTTPS_PROXY=
+
+# # Ignore carriage returns in Cygwin
+# export SHELLOPTS
+# set -o igncr
+
+# Select conda environment based on $CONDA_DEFAULT_ENV
+if [ -n "${CONDA_DEFAULT_ENV}" ] && [ "${CONDA_DEFAULT_ENV}" != 'base' ]; then
+    export CONDA_PREFIX="${CONDA_ENVS_DIR}/${CONDA_DEFAULT_ENV}"
+else
+    export CONDA_DEFAULT_ENV=root
+    export CONDA_PREFIX="${CONDA_BASE_DIR}"
+fi
+
+# Add Anaconda to PATH, And Update PATH for Anaconda/Miniconda
+export PATH="$CONDA_BASE_DIR/bin:$PATH"
+# PATH=$PATH:$CONDA_PREFIX
+# PATH=$PATH:$CONDA_PREFIX/Library/mingw-w64/bin
+# PATH=$PATH:$CONDA_PREFIX/Library/usr/bin
+# PATH=$PATH:$CONDA_PREFIX/Library/bin
+# PATH=$PATH:$CONDA_PREFIX/Scripts
+# PATH=$PATH:$HOME/scripts
+# PATH=$PATH:$HOME/local/bin
+# PATH=$PATH:/usr/local/bin
+# PATH=$PATH:/usr/bin
+export PATH
+
+# alias conda="${CONDA_BASE_DIR}/bin/conda"
+
+# <<< conda initialized <<<
+###############################################################################
